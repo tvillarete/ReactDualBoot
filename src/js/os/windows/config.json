@@ -1,0 +1,36 @@
+{
+   "version": 1.0,
+   "desktop": {
+      "background":
+         "images/wallpapers/cookie.jpg"
+   },
+   "apps": [
+      {
+         "name": "Taskbar",
+         "isActive": true,
+         "forceHideTaskbar": true,
+         "theme": "dark"
+      },
+      {
+         "name": "Start Menu",
+         "icon": "windows.svg",
+         "inTaskbar": true,
+         "noStyles": true
+      },
+      {
+         "name": "Settings",
+         "icon": "settings.png",
+         "isWindowed": true,
+         "inStartMenu": true,
+         "inTaskbar": true,
+         "options": {
+            "border": "dodgerblue"
+         },
+         "titleBar": {
+            "left": ["title"],
+            "middle": [],
+            "right": ["actionButtons"]
+         }
+      }
+   ]
+}
