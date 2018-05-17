@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
+import JSON from 'circular-json';
 import config from './windows/config';
 import Desktop from './windows/desktop';
 
 export default class Windows extends Component {
    state = {
+      saveConfig: false,
       config: config
    }
 
    handleEvent = options => {
       switch (options.type) {
+         case 'change-background':
+            this.changeBackground(options);
+            break;
          case 'update-app-config':
             this.updateAppConfig(options);
             break;
@@ -17,6 +22,14 @@ export default class Windows extends Component {
             break;
       }
    };
+
+   changeBackground(options) {
+      let { config } = this.state;
+      const { url } = options;
+      config.desktop.background = url;
+
+      this.updateConfig(config);
+   }
 
    updateAppConfig(options) {
       const { appConfig } = options;
@@ -30,8 +43,17 @@ export default class Windows extends Component {
       }
    }
 
+   updateConfig(newConfig) {
+      this.setState({ config: newConfig });
+      localStorage.windows_config = JSON.stringify(newConfig);
+   }
+
    getConfig() {
+      if (!this.state.saveConfig) {
+         localStorage.removeItem('windows_config');
+      }
       const lsConfig = localStorage.windows_config;
+
       if (!lsConfig) {
          return;
       }

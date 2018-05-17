@@ -10,6 +10,7 @@ const DesktopContainer = styled.div`
    right: 0;
    background: url(${props => props.background}) no-repeat center center fixed;
    background-size: cover;
+   transition: background 1s;
 `;
 
 export default class Desktop extends Component {
