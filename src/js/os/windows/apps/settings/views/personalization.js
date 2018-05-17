@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Sidebar from '../components/sidebar';
+import Background from './personalization/background';
 
 const Container = styled.div`
    display: flex;
@@ -13,6 +14,10 @@ const ContentContainer = styled.div`
    background: white;
    padding-top: 2.5em;
 `;
+
+const views = {
+   Background: <Background />
+}
 
 export default class PersonalizationView extends Component {
    state = {
@@ -36,12 +41,28 @@ export default class PersonalizationView extends Component {
       this.setState({ section });
    }
 
+   getCurrentSection = () => {
+      const { section } = this.state;
+      const view = views[section];
+      const props = {
+         onEvent: this.handleEvent
+      }
+
+      try {
+         return React.cloneElement(view, props);
+      } catch(e) {
+         console.error("Unable to get current section");
+      }
+   }
+
    render() {
       const { section } = this.state;
       return (
          <Container>
             <Sidebar view="Personalization" section={section} onEvent={this.handleEvent} />
-            <ContentContainer />
+            <ContentContainer>
+               {this.getCurrentSection()}
+            </ContentContainer>
          </Container>
       );
    }
