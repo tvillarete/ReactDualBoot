@@ -2,16 +2,20 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const OuterContainer = styled.div`
+   z-index: 10;
+   position: absolute;
+   top: 0;
    height: 2.5em;
    width: 100%;
    display: flex;
-   font-family: sans-serif;
-   background: ${props => props.color || 'white'};
-   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+   flex: 1;
+`;
 
-   h3 {
-      font-weight: normal;
-   }
+const Text = styled.h4`
+   font-family: sans-serif;
+   font-weight: normal;
+   margin: 0 8px;
+   user-select: none;
 `;
 
 const LeftContainer = styled.div`
@@ -36,7 +40,7 @@ const RightContainer = styled.div`
 
 const ActionButton = styled.div`
    height: 100%;
-   width: 3em;
+   width: 3.5em;
    text-align: center;
    display: flex;
    justify-content: center;
@@ -46,6 +50,7 @@ const ActionButton = styled.div`
    h3 {
       margin: 0;
       font-weight: normal;
+      user-select: none;
    }
 
    &:hover {
@@ -57,9 +62,10 @@ const ActionButton = styled.div`
    }
 `;
 
-const ActionIcon = styled.img`
+const Icon = styled.img`
    max-height: 1em;
    max-width: 1em;
+   user-select: none;
 `;
 
 const ActionButtonContainer = styled.div`
@@ -71,15 +77,35 @@ const ActionButtons = ({ onEvent }) => {
    return (
       <ActionButtonContainer>
          <ActionButton onClick={() => onEvent({ type: 'minimize' })}>
-            <ActionIcon src={'images/icons/windows/minimize.svg'}/>
+            <Icon src={'images/icons/windows/minimize.svg'} />
          </ActionButton>
          <ActionButton onClick={() => onEvent({ type: 'maximize' })}>
-            <ActionIcon src={'images/icons/windows/maximize.svg'}/>
+            <Icon src={'images/icons/windows/maximize.svg'} />
          </ActionButton>
          <ActionButton color="red" onClick={() => onEvent({ type: 'close' })}>
-            <ActionIcon src={'images/icons/windows/close.svg'}/>
+            <Icon src={'images/icons/windows/close.svg'} />
          </ActionButton>
       </ActionButtonContainer>
+   );
+};
+
+const BackButtonContainer = styled.div`
+   height: 100%;
+   width: 3.5em;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   &:hover {
+      background: ${props => props.accent || 'dodgerblue'};
+   }
+`;
+
+const BackButton = ({ onEvent }) => {
+   return (
+      <BackButtonContainer onClick={() => onEvent({ type: 'back' })}>
+         <Icon src={'images/icons/windows/back_arrow.svg'} />
+      </BackButtonContainer>
    );
 };
 
@@ -94,6 +120,9 @@ export default class TitleBar extends Component {
             break;
          case 'close':
             this.closeWindow();
+            break;
+         case 'back':
+            this.back();
             break;
          default:
             this.props.onEvent(options);
@@ -122,14 +151,33 @@ export default class TitleBar extends Component {
       });
    };
 
+   back = () => {
+      let { appConfig } = this.props;
+      let { viewStack } = appConfig.app;
+
+      if (viewStack.length > 1) {
+         viewStack = viewStack.pop();
+      }
+
+      appConfig.viewStack = viewStack;
+
+      this.props.onEvent({
+         type: 'update-app-config',
+         appConfig
+      });
+   }
+
    getComponent = (property, index) => {
       const { appConfig } = this.props;
+      const { viewStack } = appConfig.app;
 
       switch (property) {
          case 'title':
-            return <h3 key={index}>{appConfig.name}</h3>;
+            return <Text key={index}>{appConfig.name}</Text>;
          case 'actionButtons':
             return <ActionButtons key={index} onEvent={this.handleEvent} />;
+         case 'back':
+            return viewStack.length > 1 && <BackButton key={index} onEvent={this.handleEvent} />;
          default:
             return <h3>Default</h3>;
       }

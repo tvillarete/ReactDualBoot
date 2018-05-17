@@ -1,24 +1,35 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
+import Sidebar from './start_menu/sidebar';
 import Tile from './start_menu/tile';
+import AppList from './start_menu/app_list';
 
 const duration = '0.3s';
-const Container = styled.div`
+const InvisibleContainer = styled.div`
+   z-index: 100;
    position: fixed;
-   display: flex;
-   bottom: 3.5rem;
-   left: 0;
    height: 30em;
    width: 50em;
+   bottom: 3rem;
+   left: 0;
+   overflow: hidden;
+`;
+
+const Container = styled.div`
+   position: relative;
+   height: 100%;
+   width: 100%;
+   display: flex;
+
    background: rgba(0,0,0, 1);
    backdrop-filter: blur(10px);
    animation: ${props => (props.isClosing ? 'closeDrawer' : 'openDrawer')}
       ${duration};
 
-   @supports(backdrop-filter: blur(10px)) {
+   @supports(backdrop-filter: blur(15px)) {
       backdrop-filter: blur(10px);
-      background: rgba(0,0,0,0.8);
+      background: rgba(20,20,20,0.85);
    }
 
    @keyframes openDrawer {
@@ -32,11 +43,6 @@ const Container = styled.div`
          transform: translateY(100%);
       }
    }
-`;
-
-const SidebarContainer = styled.div`
-   flex: 1;
-   max-width: 15em;
 `;
 
 const TileContainer = styled.div`
@@ -84,27 +90,32 @@ export default class StartMenu extends Component {
    }
 
    render() {
-      const { apps, appConfig } = this.props;
+      const { apps, appConfig, desktop } = this.props;
       const { isClosing } = appConfig;
+      const { accent } = desktop;
 
       return (
-         <Container isClosing={isClosing}>
-            <SidebarContainer />
-            <TileContainer>
-               {apps.map((app, index) => {
-                  if (app.inStartMenu) {
-                     return (
-                        <Tile
-                           key={index}
-                           appConfig={app}
-                           onEvent={this.handleEvent}
-                        />
-                     );
-                  }
-                  return null;
-               })}
-            </TileContainer>
-         </Container>
+         <InvisibleContainer>
+            <Container isClosing={isClosing}>
+               <Sidebar onEvent={this.handleEvent} />
+               <AppList apps={apps} onEvent={this.handleEvent}/>
+               <TileContainer>
+                  {apps.map((app, index) => {
+                     if (app.inStartMenu) {
+                        return (
+                           <Tile
+                              key={index}
+                              accent={accent}
+                              appConfig={app}
+                              onEvent={this.handleEvent}
+                           />
+                        );
+                     }
+                     return null;
+                  })}
+               </TileContainer>
+            </Container>
+         </InvisibleContainer>
       );
    }
 }

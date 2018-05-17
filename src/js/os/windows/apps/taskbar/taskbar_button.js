@@ -12,8 +12,8 @@ const ButtonContainer = styled.div`
          ? 'rgb(60,60,60)'
          : 'transparent'};
    box-shadow: ${props =>
-      props.isActive && !props.isClosing ? 'inset 0 -3px 0 0 white' : 'none'};
-   opacity: ${props => props.isClosing ? 0 : 1};
+      props.isActive && !props.isClosing ? 'inset 0 -3px 0 0 ' + props.accent : 'none'};
+   opacity: ${props => props.isClosing && !props.inTaskbar ? 0 : 1};
    transition: box-shadow ${duration} ease, opacity ${duration} ease;
    animation: appear ${duration};
 
@@ -47,19 +47,21 @@ export default class TaskbarButton extends Component {
    };
 
    render() {
-      const { appConfig } = this.props;
+      const { appConfig, inTaskbar, accent } = this.props;
       const { isActive, isClosing, isMinimized } = appConfig;
       const props = {
          isActive,
          isClosing,
-         isMinimized
+         inTaskbar,
+         isMinimized,
+         accent
       }
 
       return (
          <ButtonContainer
             {...(appConfig.noStyles ? null : props)}
             onClick={this.handleEvent}>
-            <Icon src={`images/icons/windows/${appConfig.icon}`} />
+            <Icon src={`images/icons/windows/${appConfig.icon}`} draggable="false"/>
          </ButtonContainer>
       );
    }

@@ -46,7 +46,7 @@ export default class AppManager extends Component {
    openApp(options) {
       let { appConfig } = options;
 
-      if (appConfig.isActive && appConfig.isMinimized) {
+      if (appConfig.isActive && !appConfig.isMinimized) {
          return;
       }
       appConfig.isMinimized = false;
@@ -148,7 +148,7 @@ export default class AppManager extends Component {
 
    render() {
       const { config } = this.props;
-      const { apps } = config;
+      const { apps, desktop } = config;
 
       return (
          <AppsContainer>
@@ -157,12 +157,14 @@ export default class AppManager extends Component {
                   if (app.isWindowed) {
                      return this.getWindowedApp(appList[app.name], {
                         apps,
+                        desktop,
                         appConfig: app,
                         onEvent: this.handleEvent,
                      });
                   }
                   return React.cloneElement(appList[app.name], {
                      apps,
+                     desktop,
                      appConfig: app,
                      onEvent: this.handleEvent,
                   });

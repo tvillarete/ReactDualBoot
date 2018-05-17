@@ -6,10 +6,11 @@ const Container = styled.div`
    flex-direction: column;
    height: 7em;
    width: 7em;
-   background: dodgerblue;
+   background: ${props => props.color || 'dodgerblue'};
+   border: 2px solid ${props => props.color || 'dodgerblue'};
 
    &:hover {
-      outline: 3px solid white;
+      border: 2px solid white;
    }
 `;
 
@@ -20,8 +21,9 @@ const IconContainer = styled.div`
 `;
 
 const Icon = styled.img`
-   height: 100%;
+   height: 80%;
    width: auto;
+   margin: auto;
 `;
 
 const TileTitle = styled.h3`
@@ -30,6 +32,7 @@ const TileTitle = styled.h3`
    font-family: sans-serif;
    font-weight: normal;
    margin: 8px;
+   user-select: none;
 `;
 
 export default class Tile extends Component {
@@ -44,11 +47,11 @@ export default class Tile extends Component {
    }
 
    render() {
-      const { appConfig } = this.props;
+      const { appConfig, accent } = this.props;
       return (
-         <Container onClick={this.openApp}>
+         <Container color={accent} onClick={this.openApp}>
             <IconContainer>
-               <Icon src={`images/icons/windows/${appConfig.icon}`}/>
+               <Icon src={`images/icons/windows/${appConfig.icon}`} draggable="false"/>
             </IconContainer>
             <TileTitle>{appConfig.name}</TileTitle>
          </Container>

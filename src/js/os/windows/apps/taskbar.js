@@ -8,12 +8,15 @@ const TaskbarContainer = styled.div`
    bottom: 0;
    left: 0;
    right: 0;
-   height: 3.5rem;
+   height: 3rem;
    display: flex;
    background: black;
 
-   ${props => props.theme === 'dark' && `
-   `}
+   @supports(backdrop-filter: blur(10px)) {
+      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.85);
+   }
+
 `;
 
 
@@ -27,7 +30,7 @@ export default class Taskbar extends Component {
    }
 
    render() {
-      const { apps, appConfig } = this.props;
+      const { apps, appConfig, desktop } = this.props;
 
       return (
          <TaskbarContainer
@@ -36,7 +39,9 @@ export default class Taskbar extends Component {
                return app.inTaskbar || (app.isActive && !app.forceHideTaskbar) ? (
                   <TaskbarButton
                      key={app.name}
+                     inTaskbar={app.inTaskbar}
                      appConfig={app}
+                     accent={desktop.accent}
                      onEvent={this.handleEvent}/>
                ) : null
             })}

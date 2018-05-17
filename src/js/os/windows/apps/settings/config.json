@@ -1,0 +1,17 @@
+{
+   "views": {
+      "Personalization": {
+         "sections": [
+            {
+               "name": "Background"
+            },
+            {
+               "name": "Colors"
+            },
+            {
+               "name": "Lock screen"
+            }
+         ]
+      }
+   }
+}

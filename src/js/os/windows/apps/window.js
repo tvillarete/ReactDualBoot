@@ -18,15 +18,21 @@ const openWindow = keyframes`
 `;
 
 const WindowContainer = styled.div`
-   height: 30em;
-   width: 40em;
-   background: ${props => props.color || 'white'};
-   animation: ${props => props.isClosing ? closeWindow : openWindow} ${duration};
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   height: ${props => props.dimensions ? props.dimensions.height + 'px' : '800px'};
+   width: ${props => props.dimensions ? props.dimensions.width + 'px' : '800px'};
+   animation: ${props => (props.isClosing ? closeWindow : openWindow)}
+      ${duration};
    transition: all 0.3s ease;
-   border: 1px solid ${props => props.border || 'transparent'};
+   border: 1px solid ${props => props.accent || 'transparent'};
    box-sizing: border-box;
+   overflow: hidden;
 
-   ${props => props.isMinimized && `
+   ${props =>
+      props.isMinimized &&
+      `
       opacity: 0;
       transform: translate(-50%, ${window.innerHeight}px) scale(0.5);
       pointer-events: none;
@@ -34,7 +40,7 @@ const WindowContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-
+   flex: 1;
 `;
 
 export default class AppWindow extends Component {
@@ -46,15 +52,29 @@ export default class AppWindow extends Component {
       }
    };
 
+   getWindowContents = () => {
+      const { windowContents, appConfig } = this.props;
+      const props = {
+         appConfig,
+         onEvent: this.handleEvent
+      }
+
+      return React.cloneElement(windowContents, props);
+   }
+
    render() {
-      const { appConfig } = this.props;
-      const { options } = appConfig;
-      const { isClosing, isMinimized } = appConfig;
+      const { appConfig, desktop } = this.props;
+      const { app, isClosing, isMinimized } = appConfig;
+      const { accent } = desktop;
 
       return (
-         <WindowContainer isClosing={isClosing} isMinimized={isMinimized} {...options}>
+         <WindowContainer
+            isClosing={isClosing}
+            isMinimized={isMinimized}
+            accent={accent}
+            {...app}>
             <TitleBar {...this.props} onEvent={this.handleEvent} />
-            <ContentContainer>{this.props.windowContents}</ContentContainer>
+            <ContentContainer>{this.getWindowContents()}</ContentContainer>
          </WindowContainer>
       );
    }
