@@ -54,10 +54,10 @@ const ActionButton = styled.div`
    }
 
    &:hover {
-      background: ${props => props.color || 'rgb(235,235,235)'};
+      background: ${props => props.color || 'rgb(240,240,240)'};
 
       img {
-         fill-color: white;
+         filter: invert(${props => props.color === 'red' ? 1 : 0}) brightness(200%);
       }
    }
 `;

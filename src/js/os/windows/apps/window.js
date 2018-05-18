@@ -36,6 +36,10 @@ const WindowContainer = styled.div`
       opacity: 0;
       transform: translate(-50%, ${window.innerHeight}px) scale(0.5);
       pointer-events: none;
+
+      div {
+         backdrop-filter: none !important;
+      }
    `};
 `;
 

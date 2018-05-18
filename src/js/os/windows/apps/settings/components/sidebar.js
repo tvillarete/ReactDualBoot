@@ -23,7 +23,7 @@ const SectionHeader = styled.h4`
 const ButtonContainer = styled.div`
    display: flex;
    align-items: center;
-   height: 2em;
+   padding: 12px 0;
    width: 100%;
    border-left: 4px solid ${props => props.isActive ? 'dodgerblue' : 'transparent'};
    box-sizing: border-box;
