@@ -14,6 +14,9 @@ export default class Windows extends Component {
          case 'change-background':
             this.changeBackground(options);
             break;
+         case 'change-accent':
+            this.changeAccent(options);
+            break;
          case 'update-app-config':
             this.updateAppConfig(options);
             break;
@@ -27,6 +30,14 @@ export default class Windows extends Component {
       let { config } = this.state;
       const { url } = options;
       config.desktop.background = url;
+
+      this.updateConfig(config);
+   }
+
+   changeAccent(options) {
+      let { config } = this.state;
+      const { accent } = options;
+      config.desktop.accent = accent;
 
       this.updateConfig(config);
    }

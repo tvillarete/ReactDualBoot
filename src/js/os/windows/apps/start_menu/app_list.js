@@ -34,7 +34,7 @@ const Icon = styled.img`
    width: 2em;
    padding: 8px;
    margin-right: 8px;
-   background: dodgerblue;
+   background: ${props => props.accent};
    user-select: none;
 `;
 
@@ -89,13 +89,14 @@ export default class AppList extends Component {
    getLetterGroup = letter => {
       const { list } = this.state;
       const group = list[letter];
+      const { accent } = this.props;
       const appButtons = [];
 
       for (let app in group) {
          const config = group[app];
          appButtons.push(
             <AppButton key={app} onClick={() => this.openApp(config)}>
-               <Icon src={`images/icons/windows/${config.icon}`} draggable="false"/>
+               <Icon accent={accent} src={`images/icons/windows/${config.icon}`} draggable="false"/>
                <AppText>{app}</AppText>
             </AppButton>
          );

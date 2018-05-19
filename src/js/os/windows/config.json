@@ -2,8 +2,8 @@
    "version": 1.0,
    "desktop": {
       "background":
-         "images/wallpapers/cliffs.png",
-      "accent": "dodgerblue"
+         "images/wallpapers/cliffs.jpg",
+      "accent": "#0079D0"
    },
    "apps": [
       {
@@ -25,10 +25,10 @@
          "inStartMenu": true,
          "inTaskbar": true,
          "app": {
-            "viewStack": [{"view": "home"}],
+            "viewStack": [{"view": "Home"}],
             "dimensions": {
                "height": 600,
-               "width": 800
+               "width": 820
             }
          },
          "titleBar": {

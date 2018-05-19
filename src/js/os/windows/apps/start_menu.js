@@ -5,7 +5,8 @@ import Sidebar from './start_menu/sidebar';
 import Tile from './start_menu/tile';
 import AppList from './start_menu/app_list';
 
-const duration = '0.3s';
+const duration = '0.6s';
+const shortDuration = '0.2s';
 const InvisibleContainer = styled.div`
    z-index: 100;
    position: fixed;
@@ -14,6 +15,25 @@ const InvisibleContainer = styled.div`
    bottom: 3rem;
    left: 0;
    overflow: hidden;
+   animation: ${props => props.isClosing ? 'opacityZero' : 'opacity'} ${duration};
+
+   @keyframes opacityZero {
+      50% {
+         opacity: 0;
+      }
+      100% {
+      opacity: 0;
+      }
+   }
+   @keyframes opacity {
+      50% {
+         opacity: 1;
+      }
+      100% {
+      opacity: 1;
+      }
+   }
+
 `;
 
 const Container = styled.div`
@@ -22,25 +42,26 @@ const Container = styled.div`
    width: 100%;
    display: flex;
 
-   background: rgba(0,0,0, 1);
-   backdrop-filter: blur(10px);
+   background: rgba(0, 0, 0, 1);
+   backdrop-filter: ${props => props.isClosing ? 'none !important' : 'blur(10px)'};
    animation: ${props => (props.isClosing ? 'closeDrawer' : 'openDrawer')}
-      ${duration};
+      ${props => props.isClosing ? shortDuration + ' ease' : duration + ' cubic-bezier(0,.99,0,.99)'};
 
-   @supports(backdrop-filter: blur(15px)) {
+   @supports (backdrop-filter: blur(15px)) {
       backdrop-filter: blur(10px);
-      background: rgba(20,20,20,0.85);
+      background: rgba(20, 20, 20, 0.85);
    }
 
    @keyframes openDrawer {
       from {
-         transform: translateY(100%);
+         opacity: 0;
+         transform: translateY(30%);
       }
    }
 
    @keyframes closeDrawer {
-      to {
-         transform: translateY(100%);
+      100% {
+         transform: translateY(50%);
       }
    }
 `;
@@ -95,10 +116,14 @@ export default class StartMenu extends Component {
       const { accent } = desktop;
 
       return (
-         <InvisibleContainer>
+         <InvisibleContainer isClosing={isClosing}>
             <Container isClosing={isClosing}>
                <Sidebar onEvent={this.handleEvent} />
-               <AppList apps={apps} onEvent={this.handleEvent}/>
+               <AppList
+                  apps={apps}
+                  accent={accent}
+                  onEvent={this.handleEvent}
+               />
                <TileContainer>
                   {apps.map((app, index) => {
                      if (app.inStartMenu) {

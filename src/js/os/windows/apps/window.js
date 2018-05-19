@@ -23,18 +23,20 @@ const WindowContainer = styled.div`
    flex-direction: column;
    height: ${props => props.dimensions ? props.dimensions.height + 'px' : '800px'};
    width: ${props => props.dimensions ? props.dimensions.width + 'px' : '800px'};
-   animation: ${props => (props.isClosing ? closeWindow : openWindow)}
-      ${duration};
-   transition: all 0.3s ease;
+   max-width: 100%;
+   max-height: 100%;
    border: 1px solid ${props => props.accent || 'transparent'};
    box-sizing: border-box;
    overflow: hidden;
+   transition: all 0.2s;
+   animation: ${props => (props.isClosing ? closeWindow : openWindow)}
+      ${duration};
 
    ${props =>
       props.isMinimized &&
       `
       opacity: 0;
-      transform: translate(-50%, ${window.innerHeight}px) scale(0.5);
+      transform: translate(-${window.innerWidth/100}%, 50%) scale(0.5);
       pointer-events: none;
 
       div {
@@ -57,10 +59,11 @@ export default class AppWindow extends Component {
    };
 
    getWindowContents = () => {
-      const { windowContents, appConfig } = this.props;
+      const { windowContents, appConfig, desktop } = this.props;
       const props = {
          appConfig,
-         onEvent: this.handleEvent
+         onEvent: this.handleEvent,
+         desktop
       }
 
       return React.cloneElement(windowContents, props);

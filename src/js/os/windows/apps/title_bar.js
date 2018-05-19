@@ -57,7 +57,8 @@ const ActionButton = styled.div`
       background: ${props => props.color || 'rgb(240,240,240)'};
 
       img {
-         filter: invert(${props => props.color === 'red' ? 1 : 0}) brightness(200%);
+         filter: invert(${props => (props.color === 'red' ? 1 : 0)})
+            brightness(200%);
       }
    }
 `;
@@ -91,19 +92,25 @@ const ActionButtons = ({ onEvent }) => {
 
 const BackButtonContainer = styled.div`
    height: 100%;
-   width: 3.5em;
+   width: 47px;
    display: flex;
    justify-content: center;
    align-items: center;
 
    &:hover {
-      background: ${props => props.accent || 'dodgerblue'};
+      background: ${props => props.accent};
+
+      img {
+         filter: invert(1) brightness(150%);
+      }
    }
 `;
 
-const BackButton = ({ onEvent }) => {
+const BackButton = ({ accent, onEvent }) => {
    return (
-      <BackButtonContainer onClick={() => onEvent({ type: 'back' })}>
+      <BackButtonContainer
+         accent={accent}
+         onClick={() => onEvent({ type: 'back' })}>
          <Icon src={'images/icons/windows/back_arrow.svg'} />
       </BackButtonContainer>
    );
@@ -155,20 +162,30 @@ export default class TitleBar extends Component {
       let { appConfig } = this.props;
       let { viewStack } = appConfig.app;
 
-      if (viewStack.length > 1) {
+      if (viewStack.length >= 1) {
          viewStack = viewStack.pop();
+
+         appConfig.enteringOldView = true;
+
+         setTimeout(() => {
+            this.props.onEvent({
+               type: 'update-app-config',
+               appConfig,
+            });
+         }, 300);
       }
 
       appConfig.viewStack = viewStack;
 
       this.props.onEvent({
          type: 'update-app-config',
-         appConfig
+         appConfig,
       });
-   }
+   };
 
    getComponent = (property, index) => {
-      const { appConfig } = this.props;
+      const { appConfig, desktop } = this.props;
+      const { accent } = desktop;
       const { viewStack } = appConfig.app;
 
       switch (property) {
@@ -177,7 +194,15 @@ export default class TitleBar extends Component {
          case 'actionButtons':
             return <ActionButtons key={index} onEvent={this.handleEvent} />;
          case 'back':
-            return viewStack.length > 1 && <BackButton key={index} onEvent={this.handleEvent} />;
+            return (
+               viewStack.length > 1 && (
+                  <BackButton
+                     key={index}
+                     accent={accent}
+                     onEvent={this.handleEvent}
+                  />
+               )
+            );
          default:
             return <h3>Default</h3>;
       }
@@ -194,7 +219,7 @@ export default class TitleBar extends Component {
 
    render() {
       return (
-         <OuterContainer color={this.props.color}>
+         <OuterContainer accent={this.props.accent}>
             <LeftContainer>{this.getContents('left')}</LeftContainer>
             <MiddleContainer>{this.getContents('middle')}</MiddleContainer>
             <RightContainer>{this.getContents('right')}</RightContainer>

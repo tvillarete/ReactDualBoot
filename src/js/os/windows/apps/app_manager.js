@@ -76,7 +76,7 @@ export default class AppManager extends Component {
                type: 'update-app-config',
                appConfig,
             });
-         }, 240);
+         }, 190);
       } else {
          appConfig.isActive = true;
          this.props.onEvent({
@@ -117,6 +117,7 @@ export default class AppManager extends Component {
       setTimeout(() => {
          appConfig.isClosing = false;
          appConfig.isActive = false;
+         appConfig.enteringOldView = false;
 
          this.props.onEvent({
             type: 'update-app-config',
