@@ -93,7 +93,6 @@ export default class PersonalizationView extends Component {
    };
 
    componentDidMount() {
-      console.log(this.props);
       this.setState({ enteringOldView: this.props.enteringOldView });
    }
 

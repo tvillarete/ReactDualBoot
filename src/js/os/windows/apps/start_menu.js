@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import NavPane from '../components/nav_pane';
-import Sidebar from './start_menu/sidebar';
 import Tile from './start_menu/tile';
 import AppList from './start_menu/app_list';
 import config from './start_menu/config.json';

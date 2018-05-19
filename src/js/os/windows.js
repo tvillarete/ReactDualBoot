@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import JSON from 'circular-json';
-import config from './windows/config';
+import defaultConfig from './windows/config';
 import Desktop from './windows/desktop';
 
 export default class Windows extends Component {
    state = {
       saveConfig: false,
-      config: config
+      config: defaultConfig,
    }
 
    handleEvent = options => {
@@ -20,6 +20,9 @@ export default class Windows extends Component {
          case 'update-app-config':
             this.updateAppConfig(options);
             break;
+         case 'update-desktop-config':
+            this.updateDesktopConfig(options);
+            break;
          default:
             this.props.onEvent(options);
             break;
@@ -29,17 +32,17 @@ export default class Windows extends Component {
    changeBackground(options) {
       let { config } = this.state;
       const { url } = options;
-      config.desktop.background = url;
 
-      this.updateConfig(config);
+      config.desktop.background = url;
+      this.saveConfig(config);
    }
 
    changeAccent(options) {
       let { config } = this.state;
       const { accent } = options;
-      config.desktop.accent = accent;
 
-      this.updateConfig(config);
+      config.desktop.accent = accent;
+      this.saveConfig(config);
    }
 
    updateAppConfig(options) {
@@ -54,15 +57,20 @@ export default class Windows extends Component {
       }
    }
 
-   updateConfig(newConfig) {
+   saveConfig(newConfig) {
       this.setState({ config: newConfig });
-      localStorage.windows_config = JSON.stringify(newConfig);
+
+      setTimeout(() => {
+         newConfig.apps.forEach(app => {
+            if (app.name !== 'Taskbar')
+               app.isActive = false;
+         });
+         localStorage.windows_config = JSON.stringify(newConfig);
+      }, 100);
+
    }
 
    getConfig() {
-      if (!this.state.saveConfig) {
-         localStorage.removeItem('windows_config');
-      }
       const lsConfig = localStorage.windows_config;
 
       if (!lsConfig) {
