@@ -14,6 +14,7 @@ const InvisibleContainer = styled.div`
    position: fixed;
    height: 30em;
    width: 50em;
+   max-width: 100%;
    bottom: 3rem;
    left: 0;
    overflow: hidden;
@@ -72,6 +73,8 @@ const TileContainer = styled.div`
    display: flex;
    flex: 1;
    padding: 16px;
+   flex-wrap: wrap;
+   align-content: flex-start;
 `;
 
 export default class StartMenu extends Component {
@@ -79,6 +82,8 @@ export default class StartMenu extends Component {
       switch (options.type) {
          case 'open-app':
             this.props.onEvent(options);
+            this.closeStartMenu();
+            break;
          case 'close-start-menu':
             this.closeStartMenu();
             break;
@@ -123,7 +128,6 @@ export default class StartMenu extends Component {
          <InvisibleContainer isClosing={isClosing}>
             <Container isClosing={isClosing}>
                <NavPane buttons={config.navPane} onEvent={this.handleEvent}/>
-               <Sidebar onEvent={this.handleEvent} />
                <AppList
                   apps={apps}
                   accent={accent}

@@ -5,7 +5,7 @@ const duration = '0.15s';
 const ButtonContainer = styled.div`
    position: relative;
    height: 100%;
-   width: 3.5rem;
+   width: 3em;
    display: flex;
    background: ${props =>
       props.isActive && !props.isClosing && !props.isMinimized
@@ -29,7 +29,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Icon = styled.img`
-   max-height: 50%;
+   max-height: 40%;
    margin: auto;
 `;
 

@@ -6,6 +6,7 @@ const Container = styled.div`
    flex-direction: column;
    flex: 1;
    max-width: 15em;
+   padding-left: 3.5em;
 `;
 
 const alphabet = [

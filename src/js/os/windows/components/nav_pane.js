@@ -7,7 +7,7 @@ const Container = styled.div`
    top: 0;
    bottom: 0;
    left: 0;
-   width: ${props => (props.expanded ? '16em' : '3em')};
+   width: ${props => (props.expanded ? '16em' : '48px')};
    display: flex;
    flex-direction: column;
    transition: all 0.2s ease;
@@ -26,7 +26,6 @@ const ButtonContainer = styled.div`
    display: flex;
    align-items: center;
    height: 3em;
-   padding-left: 1em;
    overflow: hidden;
 
    &:hover {
@@ -36,6 +35,15 @@ const ButtonContainer = styled.div`
    &:active {
       background: rgb(100, 100, 100);
    }
+`;
+
+const IconContainer = styled.div`
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-width: 48px;
+   max-width: 48px;
+   height: 3em;
 `;
 
 const Icon = styled.img``;
@@ -81,7 +89,9 @@ export default class NavPane extends Component {
          <ButtonContainer
             key={button.text}
             onClick={() => this.handleEvent(button.action)}>
-            <Icon src={`images/icons/windows/${button.icon}`} />
+            <IconContainer>
+               <Icon src={`images/icons/windows/${button.icon}`} />
+            </IconContainer>
             <ButtonText>{button.text}</ButtonText>
          </ButtonContainer>
       ));
@@ -101,7 +111,9 @@ export default class NavPane extends Component {
       return (
          <Container expanded={expanded}>
             <ButtonContainer onClick={this.toggle}>
-               <Icon src="images/icons/windows/menu.svg" />
+               <IconContainer>
+                  <Icon src="images/icons/windows/menu.svg" />
+               </IconContainer>
                <ButtonText>Start</ButtonText>
             </ButtonContainer>
             <MainButtonContainer>{this.getButtons()}</MainButtonContainer>
