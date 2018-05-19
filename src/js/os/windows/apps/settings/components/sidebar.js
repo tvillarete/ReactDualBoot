@@ -19,10 +19,11 @@ const Container = styled.div`
    background: white;
    max-width: 20em;
    padding-top: 4em;
+   transition: all 0.15s ease;
 
    @supports (backdrop-filter: blur(10px)) {
-      backdrop-filter: blur(15px);
-      background: rgba(240, 240, 240, 0.85);
+      backdrop-filter: ${props => props.isFocused ? 'blur(15px)' : 'none'};
+      background: ${props => props.isFocused ? 'rgba(240, 240, 240, 0.85)' : 'rgb(230,230,230)'};
    }
 `;
 
@@ -93,8 +94,10 @@ export default class Sidebar extends Component {
    };
 
    render() {
+      const { isFocused } = this.props;
+
       return (
-         <Container>
+         <Container isFocused={isFocused}>
             <ButtonContainer onClick={this.back}>
                <Icon src={spriteSheet} coords={coords.Home}/>
                <ButtonText>Home</ButtonText>

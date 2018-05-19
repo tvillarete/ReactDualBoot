@@ -36,6 +36,26 @@
             "middle": [],
             "right": ["actionButtons"]
          }
+      },
+      {
+         "name": "Edge",
+         "icon": "edge.svg",
+         "isWindowed": true,
+         "inStartMenu": true,
+         "inTaskbar": true,
+         "app": {
+            "viewStack": [{"view": "Home"}],
+            "accent": "#007BD0",
+            "dimensions": {
+               "height": 600,
+               "width": 820
+            }
+         },
+         "titleBar": {
+            "left": ["title"],
+            "middle": [],
+            "right": ["actionButtons"]
+         }
       }
    ]
 }

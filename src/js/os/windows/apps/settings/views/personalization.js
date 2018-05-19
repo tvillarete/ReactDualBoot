@@ -8,8 +8,8 @@ const Container = styled.div`
    display: flex;
    height: 100%;
    width: 100%;
-   animation: ${props => props.enteringOldView ? 'scaleBig' : 'scale'} 0.7s;
-   animation-timing-function: cubic-bezier(0,.99,0,.99);
+   animation: ${props => (props.enteringOldView ? 'scaleBig' : 'scale')} 0.7s;
+   animation-timing-function: cubic-bezier(0, 0.99, 0, 0.99);
 
    @keyframes scale {
       0% {
@@ -22,7 +22,6 @@ const Container = styled.div`
          transform: scale(1.15);
       }
    }
-
 `;
 
 const ContentContainer = styled.div`
@@ -41,6 +40,7 @@ const InnerContainer = styled.div`
    left: 0;
    right: 0;
    overflow: auto;
+   -webkit-overflow-scrolling: touch;
 `;
 
 const Header = styled.h3`
@@ -52,8 +52,8 @@ const Header = styled.h3`
 
 const views = {
    Background: <Background />,
-   Colors: <Colors />
-}
+   Colors: <Colors />,
+};
 
 export default class PersonalizationView extends Component {
    state = {
@@ -82,15 +82,15 @@ export default class PersonalizationView extends Component {
       const view = views[section];
       const props = {
          ...this.props,
-         onEvent: this.handleEvent
-      }
+         onEvent: this.handleEvent,
+      };
 
       try {
          return React.cloneElement(view, props);
-      } catch(e) {
-         console.error("Unable to get current section");
+      } catch (e) {
+         console.error('Unable to get current section');
       }
-   }
+   };
 
    componentDidMount() {
       console.log(this.props);
@@ -99,16 +99,20 @@ export default class PersonalizationView extends Component {
 
    render() {
       const { section, enteringOldView } = this.state;
-      const { desktop } = this.props;
+      const { desktop, isFocused } = this.props;
 
       return (
          <Container enteringOldView={enteringOldView}>
-            <Sidebar view="Personalization" desktop={desktop} section={section} onEvent={this.handleEvent} />
+            <Sidebar
+               view="Personalization"
+               desktop={desktop}
+               section={section}
+               isFocused={isFocused}
+               onEvent={this.handleEvent}
+            />
             <ContentContainer>
                <Header>{section}</Header>
-               <InnerContainer>
-                  {this.getCurrentSection()}
-               </InnerContainer>
+               <InnerContainer>{this.getCurrentSection()}</InnerContainer>
             </ContentContainer>
          </Container>
       );

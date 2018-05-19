@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import styled, { keyframes } from 'styled-components';
 import TitleBar from './title_bar';
 
@@ -18,14 +19,14 @@ const openWindow = keyframes`
 `;
 
 const WindowContainer = styled.div`
-   position: relative;
+   position: absolute;
    display: flex;
    flex-direction: column;
    height: ${props => props.dimensions ? props.dimensions.height + 'px' : '800px'};
    width: ${props => props.dimensions ? props.dimensions.width + 'px' : '800px'};
    max-width: 100%;
    max-height: 100%;
-   border: 1px solid ${props => props.accent || 'transparent'};
+   border: 1px solid ${props => props.isFocused ? props.accent : 'transparent'};
    box-sizing: border-box;
    overflow: hidden;
    transition: all 0.2s;
@@ -62,6 +63,7 @@ export default class AppWindow extends Component {
       const { windowContents, appConfig, desktop } = this.props;
       const props = {
          appConfig,
+         isFocused: appConfig.isFocused,
          onEvent: this.handleEvent,
          desktop
       }
@@ -69,15 +71,54 @@ export default class AppWindow extends Component {
       return React.cloneElement(windowContents, props);
    }
 
+   blur() {
+      const { appConfig } = this.props;
+
+      this.props.onEvent({
+         type: 'blur-app',
+         appConfig
+      });
+   }
+
+   focus() {
+      const { appConfig } = this.props;
+
+      this.props.onEvent({
+         type: 'focus-app',
+         appConfig
+      });
+
+   }
+
+   // Closes the dropdown if anywhere outside the dropdown is clicked.
+   handleOutsideClick = event => {
+      const domNode = ReactDOM.findDOMNode(this);
+
+      if (!(domNode && domNode.contains(event.target))) {
+         this.blur();
+      } else {
+         this.focus();
+      }
+   };
+
+   componentDidMount() {
+      document.addEventListener('click', this.handleOutsideClick, true);
+   }
+
+   componentWillUnmount() {
+      document.removeEventListener('click', this.handleOutsideClick, true);
+   }
+
    render() {
       const { appConfig, desktop } = this.props;
-      const { app, isClosing, isMinimized } = appConfig;
+      const { app, isClosing, isMinimized, isFocused } = appConfig;
       const { accent } = desktop;
 
       return (
          <WindowContainer
             isClosing={isClosing}
             isMinimized={isMinimized}
+            isFocused={isFocused}
             accent={accent}
             {...app}>
             <TitleBar {...this.props} onEvent={this.handleEvent} />

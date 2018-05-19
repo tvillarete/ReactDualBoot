@@ -6,6 +6,7 @@ const Container = styled.div`
    flex-direction: column;
    height: 7em;
    width: 7em;
+   margin: 4px 4px 0 0;
    background: ${props => props.color || 'dodgerblue'};
    border: 2px solid ${props => props.color || 'dodgerblue'};
 

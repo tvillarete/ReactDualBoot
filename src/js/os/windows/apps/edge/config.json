@@ -1,0 +1,38 @@
+{
+   "categories": [
+      {
+         "name": "System",
+         "description": "Display, sound, notifications, power"
+      }, {
+         "name": "Devices",
+         "description": "Bluetooth, printers, mouse"
+      },{
+         "name": "Phone",
+         "description": "Network & Internet"
+      },{
+         "name": "Network & Internet",
+         "description": "Wi-Fi, airplane mode, VPN"
+      }, {
+         "name": "Personalization",
+         "description": "Background, lock screen, colors"
+      }, {
+         "name": "Apps",
+         "description": "Uninstall, defaults, optional features"
+      }
+   ],
+   "views": {
+      "Personalization": {
+         "sections": [
+            {
+               "name": "Background"
+            },
+            {
+               "name": "Colors"
+            },
+            {
+               "name": "Lock screen"
+            }
+         ]
+      }
+   }
+}

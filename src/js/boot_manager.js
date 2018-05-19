@@ -11,7 +11,14 @@ export default class BootManager extends Component {
    };
 
    handleEvent = options => {
-      console.log("Empty event: Reached boot manager:", options);
+      switch(options.type) {
+         case 'reload':
+            window.location.reload();
+            break;
+         default:
+            console.log("Empty event: Reached boot manager:", options);
+            break;
+      }
    }
 
    loadSelectedOS = () => {

@@ -96,7 +96,7 @@ export default class AppList extends Component {
          const config = group[app];
          appButtons.push(
             <AppButton key={app} onClick={() => this.openApp(config)}>
-               <Icon accent={accent} src={`images/icons/windows/${config.icon}`} draggable="false"/>
+               <Icon accent={config.app.accent || accent} src={`images/icons/windows/${config.icon}`} draggable="false"/>
                <AppText>{app}</AppText>
             </AppButton>
          );

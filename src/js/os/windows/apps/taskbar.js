@@ -12,7 +12,7 @@ const TaskbarContainer = styled.div`
    display: flex;
    background: black;
 
-   @supports(backdrop-filter: blur(10px)) {
+   @supports(backdrop-filter: blur(40px)) {
       backdrop-filter: blur(10px);
       background: rgba(0,0,0,0.85);
    }

@@ -1,0 +1,35 @@
+{
+   "navPane": [
+      {
+         "icon": "power.svg",
+         "text": "Power",
+         "action": {
+            "type": "reload"
+         }
+      },
+      {
+         "icon": "settings_mini.svg",
+         "text": "Settings",
+         "action": {
+            "type": "open-app",
+            "name": "Settings"
+         }
+      },
+      {
+         "icon": "personalization.svg",
+         "text": "Personalization",
+         "action": {
+            "type": "open-app",
+            "name": "Settings"
+         }
+      },
+      {
+         "icon": "documents.svg",
+         "text": "Documents",
+         "action": {
+            "type": "open-app",
+            "name": "Settings"
+         }
+      }
+   ]
+}

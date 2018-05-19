@@ -3,12 +3,14 @@ import styled from 'styled-components';
 import Taskbar from './taskbar';
 import StartMenu from './start_menu';
 import Settings from './settings';
+import Edge from './edge';
 import AppWindow from './window';
 
 const appList = {
    Taskbar: <Taskbar key="Taskbar" />,
    'Start Menu': <StartMenu key="Start Menu" />,
    Settings: <Settings key="Settings App" />,
+   Edge: <Edge key="Edge App" />,
 };
 
 const AppsContainer = styled.div`
@@ -37,6 +39,12 @@ export default class AppManager extends Component {
          case 'minimize-window':
             this.minimizeWindow(options);
             break;
+         case 'blur-app':
+            this.blurApp(options);
+            break;
+         case 'focus-app':
+            this.focusApp(options);
+            break;
          default:
             this.props.onEvent(options);
             break;
@@ -44,13 +52,22 @@ export default class AppManager extends Component {
    };
 
    openApp(options) {
-      let { appConfig } = options;
+      const { config } = this.props;
+      let { appConfig, name } = options;
+      if (name && !appConfig) {
+         for (let index in config.apps) {
+            if (config.apps[index].name === name) {
+               appConfig = config.apps[index];
+            }
+         }
+      }
 
       if (appConfig.isActive && !appConfig.isMinimized) {
          return;
       }
       appConfig.isMinimized = false;
       appConfig.isActive = true;
+      appConfig.isFocused = true;
 
       this.props.onEvent({
          type: 'update-app-config',
@@ -91,8 +108,10 @@ export default class AppManager extends Component {
 
       if (!appConfig.isActive) {
          appConfig.isActive = true;
+         appConfig.isFocused = true;
       } else {
          appConfig.isMinimized = !options.appConfig.isMinimized;
+         appConfig.isFocused = true;
       }
 
       if (options.value === 'close') {
@@ -136,10 +155,30 @@ export default class AppManager extends Component {
       });
    }
 
+   blurApp(options) {
+      let { appConfig } = options;
+
+      appConfig.isFocused = false;
+      this.props.onEvent({
+         type: 'update-app-config',
+         appConfig
+      });
+   }
+
+   focusApp(options) {
+      let { appConfig } = options;
+
+      appConfig.isFocused = true;
+      this.props.onEvent({
+         type: 'update-app-config',
+         appConfig
+      });
+   }
+
    getWindowedApp = (app, props) => {
       return (
          <AppWindow
-            key={`${app.name}-window`}
+            key={`${app.key}-window`}
             {...props}
             windowContents={app}
             onEvent={this.handleEvent}

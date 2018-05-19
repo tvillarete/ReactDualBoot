@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
+import NavPane from '../components/nav_pane';
 import Sidebar from './start_menu/sidebar';
 import Tile from './start_menu/tile';
 import AppList from './start_menu/app_list';
+import config from './start_menu/config.json';
 
 const duration = '0.6s';
 const shortDuration = '0.2s';
@@ -75,6 +77,8 @@ const TileContainer = styled.div`
 export default class StartMenu extends Component {
    handleEvent = options => {
       switch (options.type) {
+         case 'open-app':
+            this.props.onEvent(options);
          case 'close-start-menu':
             this.closeStartMenu();
             break;
@@ -118,6 +122,7 @@ export default class StartMenu extends Component {
       return (
          <InvisibleContainer isClosing={isClosing}>
             <Container isClosing={isClosing}>
+               <NavPane buttons={config.navPane} onEvent={this.handleEvent}/>
                <Sidebar onEvent={this.handleEvent} />
                <AppList
                   apps={apps}
@@ -130,7 +135,7 @@ export default class StartMenu extends Component {
                         return (
                            <Tile
                               key={index}
-                              accent={accent}
+                              accent={app.app.accent || accent}
                               appConfig={app}
                               onEvent={this.handleEvent}
                            />

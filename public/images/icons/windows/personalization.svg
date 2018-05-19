@@ -1,0 +1,8 @@
+<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.25" y="0.25" width="0.5" height="0.5" transform="translate(12 3)" stroke="white" stroke-width="0.5"/>
+<rect x="0.5" y="0.5" width="15" height="11" stroke="white"/>
+<path d="" transform="translate(0 7.29291) rotate(-45)" stroke="white"/>
+<path d="" transform="translate(12.7646 11.0575) scale(-1 1) rotate(-45)" stroke="white"/>
+<path d="" transform="translate(8.92575 8.28131) rotate(-45)" stroke="white"/>
+<path d="" transform="translate(15.7131 9.92023) scale(-1 1) rotate(-45)" stroke="white"/>
+</svg>
