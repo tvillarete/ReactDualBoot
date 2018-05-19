@@ -59,18 +59,12 @@ export default class Windows extends Component {
 
    saveConfig(newConfig) {
       this.setState({ config: newConfig });
-
-      setTimeout(() => {
-         newConfig.apps.forEach(app => {
-            if (app.name !== 'Taskbar')
-               app.isActive = false;
-         });
-         localStorage.windows_config = JSON.stringify(newConfig);
-      }, 100);
-
    }
 
    getConfig() {
+      if (!this.state.saveConfig) {
+         localStorage.removeItem('windows_config');
+      }
       const lsConfig = localStorage.windows_config;
 
       if (!lsConfig) {
