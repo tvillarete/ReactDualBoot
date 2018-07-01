@@ -52,7 +52,9 @@
             }
          },
          "titleBar": {
-            "left": ["title"],
+            "hasBlur": true,
+            "onlyActionButtons": true,
+            "left": [],
             "middle": [],
             "right": ["actionButtons"]
          }

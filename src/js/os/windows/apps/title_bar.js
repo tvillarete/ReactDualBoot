@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const OuterContainer = styled.div`
-   z-index: 10;
+   z-index: ${props => props.onlyActionButtons ? 0 : 10};
    position: absolute;
    top: 0;
    height: 2.5em;
    width: 100%;
+   right: ${props => props.onlyActionButtons && '0'};
    display: flex;
    flex: 1;
+   backdrop-filter: ${props => (props.hasBlur ? 'blur(10px)' : null)};
+   background: ${props => (props.hasBlur ? 'rgba(230,230,230,0.75)' : null)};
 `;
 
 const Text = styled.h4`
@@ -218,8 +221,16 @@ export default class TitleBar extends Component {
    };
 
    render() {
+      const { appConfig } = this.props;
+      const { titleBar } = appConfig;
+      const { hasBlur, onlyActionButtons } = titleBar;
+      console.log(appConfig);
+
       return (
-         <OuterContainer accent={this.props.accent}>
+         <OuterContainer
+            hasBlur={hasBlur}
+            onlyActionButtons={onlyActionButtons}
+            accent={this.props.accent}>
             <LeftContainer>{this.getContents('left')}</LeftContainer>
             <MiddleContainer>{this.getContents('middle')}</MiddleContainer>
             <RightContainer>{this.getContents('right')}</RightContainer>

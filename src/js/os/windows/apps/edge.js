@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import HomeView from './edge/views/home';
+import TabBar from './edge/components/tab_bar';
 
 const ViewContainer = styled.div`
    display: flex;
@@ -17,12 +18,28 @@ const views = {
 export default class Edge extends Component {
    state = {
       changingView: false,
+      tabs: [
+         {
+            title: 'Bing',
+            url: 'http://www.bing.com',
+         },
+      ],
+      currentTab: 0,
    };
 
    handleEvent = options => {
       switch (options.type) {
          case 'new-view':
             this.newView(options);
+            break;
+         case 'new-tab':
+            this.newTab();
+            break;
+         case 'set-current-tab':
+            this.setCurrentTab(options.index);
+            break;
+         case 'close-tab':
+            this.closeTab(options.index);
             break;
          case 'back':
             this.back();
@@ -32,6 +49,39 @@ export default class Edge extends Component {
             break;
       }
    };
+
+   setCurrentTab(index) {
+      this.setState({ currentTab: index });
+   }
+
+   newTab = () => {
+      this.setState(state => {
+         state.tabs.push({
+            title: 'Bing',
+            url: 'https://www.bing.com'
+         });
+         state.currentTab = state.tabs.length-1;
+         return state;
+      });
+   }
+
+   closeTab(index) {
+      const {appConfig} = this.props;
+
+      if (this.state.tabs.length === 1) {
+         this.props.onEvent({
+            type: 'close-window',
+            appConfig
+         });
+         return;
+      }
+
+      this.setState(state => {
+         state.tabs.splice(index, 1);
+         state.curentTab = state.tabs[state.tabs.length-1].index;
+         return state;
+      })
+   }
 
    newView = options => {
       let { appConfig } = this.props;
@@ -63,14 +113,13 @@ export default class Edge extends Component {
 
       if (viewStack.length >= 1) {
          viewStack = viewStack.pop();
-         console.log("HERE");
 
          this.setState({
             changingView: true,
          });
          appConfig.enteringOldView = true;
 
-            console.log(appConfig);
+         console.log(appConfig);
          setTimeout(() => {
             this.setState({
                changingView: false,
@@ -92,10 +141,14 @@ export default class Edge extends Component {
 
    getCurrentView = () => {
       const { viewStack } = this.props.appConfig.app;
+      const { tabs, currentTab } = this.state;
+
       let item = viewStack[viewStack.length - 1];
       item.props = {
          ...this.props,
          enteringOldView: this.props.appConfig.enteringOldView,
+         tabs,
+         currentTab,
          onEvent: this.handleEvent,
       };
 
@@ -108,8 +161,15 @@ export default class Edge extends Component {
    };
 
    render() {
+      const { tabs, currentTab } = this.state;
+
       return (
          <ViewContainer changingView={this.state.changingView}>
+            <TabBar
+               tabs={tabs}
+               currentTab={currentTab}
+               onEvent={this.handleEvent}
+            />
             {this.getCurrentView()}
          </ViewContainer>
       );
